@@ -6,7 +6,11 @@ const override = {
   borderColor: 'red',
 };
 
-export default function Loader({ loading }) {
+interface Props {
+  loading: boolean;
+}
+
+export default function Loader({ loading }: Props) {
   return (
     <ClipLoader
       color="#ffffff"

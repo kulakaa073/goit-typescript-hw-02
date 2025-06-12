@@ -1,8 +1,29 @@
-import axios from 'axios';
+import axios, { AxiosHeaderValue } from 'axios';
+import type { ImageData, ImagePositionProps } from './types';
 
 axios.defaults.baseURL = 'https://api.unsplash.com/';
 
-export const fetchImages = async (query = '', page = 1) => {
+interface PartialBackendImage {
+  id: string;
+  urls: {
+    small: string;
+    regular: string;
+  };
+  alt_description?: string;
+  user: {
+    name?: string;
+  };
+  description?: string;
+  width: number;
+  height: number;
+}
+
+interface Response {
+  imagesData: PartialBackendImage[];
+  totalPages: number;
+}
+
+export const fetchImages = async (query = '', page = 1): Promise<Response> => {
   const options = {
     url: 'search/photos',
     params: {
@@ -11,7 +32,7 @@ export const fetchImages = async (query = '', page = 1) => {
       per_page: 12,
     },
     headers: {
-      Authorization: import.meta.env.VITE_AUTH_TOKEN,
+      Authorization: import.meta.env.VITE_AUTH_TOKEN as AxiosHeaderValue,
     },
   };
   const response = await axios.get(options.url, {
@@ -25,7 +46,7 @@ export const fetchImages = async (query = '', page = 1) => {
   };
 };
 
-export function parseImagesData(data) {
+export function parseImagesData(data: PartialBackendImage[]): ImageData[] {
   return data.map(image => ({
     id: image.id,
     webformatURL: image.urls.small,
@@ -41,7 +62,7 @@ export function parseImagesData(data) {
 // Scales image to fit in the window, hopefully
 // Takes image object to get width and height of it
 // Returns style params to attach to style with position and new size
-export function scaleImageToRatio(image) {
+export function scaleImageToRatio(image: ImageData): ImagePositionProps {
   let widthRatio = 0.8;
   let heightRatio = 0.9;
   let windowWidth = window.innerWidth * widthRatio;
@@ -66,7 +87,7 @@ export function scaleImageToRatio(image) {
   };
 }
 
-export function scrollPage() {
+export function scrollPage(): void {
   window.scrollBy({
     top: window.innerHeight,
     left: 0,

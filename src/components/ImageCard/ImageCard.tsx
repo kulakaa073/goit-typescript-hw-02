@@ -1,6 +1,12 @@
+import { ImageData } from '../../types';
 import css from './ImageCard.module.css';
 
-export default function ImageCard({ imageData, onImageClick }) {
+interface Props {
+  imageData: ImageData;
+  onImageClick: (imageId: string) => void;
+}
+
+export default function ImageCard({ imageData, onImageClick }: Props) {
   const handleClick = () => {
     onImageClick(imageData.id);
   };

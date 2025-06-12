@@ -1,18 +1,24 @@
 import toast, { Toaster } from 'react-hot-toast';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import css from './SearchBar.module.css';
+import { FormEvent } from 'react';
 
-export default function SearchBar({ onSearch }) {
-  const handleSubmit = event => {
+interface Props {
+  onSearch: (query: string) => void;
+}
+
+export default function SearchBar({ onSearch }: Props) {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const query = event.target.searchField.value.trim();
+    const query = event.currentTarget.searchField.value.trim();
     if (!query || query === '') {
       toast('Please enter a search term');
       return;
     }
     onSearch(query);
-    event.target.reset();
+    event.currentTarget.reset();
   };
+
   return (
     <header className={css.container}>
       <form onSubmit={handleSubmit}>

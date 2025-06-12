@@ -1,9 +1,23 @@
-import Modal from 'react-modal';
+import Modal, { Styles } from 'react-modal';
 import css from './ImageModal.module.css';
 import { scaleImageToRatio } from '../../utils';
+import { ImageData } from '../../types';
 
-export default function ImageModal({ imageData, isImageModalOpen, onClose }) {
-  const customStyle = {
+interface Props {
+  imageData: ImageData | undefined;
+  isImageModalOpen: boolean;
+  onClose: () => void;
+}
+
+export default function ImageModal({
+  imageData,
+  isImageModalOpen,
+  onClose,
+}: Props) {
+  if (!imageData) {
+    return null;
+  }
+  let customStyle: Styles = {
     content: { ...scaleImageToRatio(imageData) },
   };
   return (
@@ -25,7 +39,6 @@ export default function ImageModal({ imageData, isImageModalOpen, onClose }) {
         </button>
       </div>
     </Modal>
-
     // Reference modal component
     /*     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>

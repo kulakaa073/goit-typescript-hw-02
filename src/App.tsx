@@ -11,23 +11,25 @@ import { fetchImages, parseImagesData, scrollPage } from './utils';
 
 import { useEffect, useState } from 'react';
 
-function App() {
-  const [imagesCollection, setImagesCollection] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
-  const [modalImageId, setModalImageId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [totalPages, setTotalPages] = useState(0);
+import type { ImageData } from './types';
 
-  const handleSearch = query => {
+function App() {
+  const [imagesCollection, setImagesCollection] = useState<ImageData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
+  const [modalImageId, setModalImageId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [totalPages, setTotalPages] = useState<number>(0);
+
+  const handleSearch = (query: string): void => {
     setSearchQuery(query);
     setImagesCollection([]);
     setCurrentPage(1);
   };
 
-  const incrementPage = () => {
+  const incrementPage = (): void => {
     setCurrentPage(currentPage + 1);
   };
 
@@ -35,7 +37,7 @@ function App() {
     if (searchQuery === '') {
       return;
     }
-    async function fetchData() {
+    async function fetchData(): Promise<void> {
       try {
         setIsLoading(true);
         setIsError(false);
@@ -58,12 +60,12 @@ function App() {
 
   const isLastPage = currentPage === totalPages - 1;
 
-  const handleImageClick = imageId => {
+  const handleImageClick = (imageId: string): void => {
     setModalImageId(imageId); // Set the clicked image data
     setIsImageModalOpen(true); // Open the modal
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (): void => {
     setIsImageModalOpen(false); // Close the modal
     setModalImageId(null);
   };
@@ -81,14 +83,16 @@ function App() {
           onImageClick={handleImageClick}
         />
       )}
-      {isLoading && <Loader />}
+      {isLoading && <Loader loading={isLoading} />}
       {isError && <ErrorMessage />}
       {imagesCollection.length > 0 && !isLastPage && !isLoading && (
         <LoadMoreButton onLoadMore={incrementPage} />
       )}
       {isImageModalOpen && (
         <ImageModal
-          imageData={imagesCollection.find(image => image.id === modalImageId)}
+          imageData={imagesCollection.find(
+            (image: ImageData) => image.id === modalImageId
+          )}
           isImageModalOpen={isImageModalOpen}
           onClose={handleCloseModal}
         />
