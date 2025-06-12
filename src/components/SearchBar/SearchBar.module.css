@@ -1,0 +1,19 @@
+.container {
+  background-color: cadetblue;
+  padding: 16px;
+  margin-bottom: 20px;
+  position: sticky;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.searchBar {
+  width: 375px;
+  height: 50px;
+}
+
+.searchButton {
+  width: 100px;
+  height: 50px;
+}
