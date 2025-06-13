@@ -35,7 +35,10 @@ export const fetchImages = async (query = '', page = 1): Promise<Response> => {
       Authorization: import.meta.env.VITE_AUTH_TOKEN as AxiosHeaderValue,
     },
   };
-  const response = await axios.get(options.url, {
+  const response = await axios.get<{
+    results: PartialBackendImage[];
+    total_pages: number;
+  }>(options.url, {
     params: options.params,
     headers: options.headers,
   });
